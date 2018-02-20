@@ -32,7 +32,6 @@ import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 
 public class CustomSaveDialogAction extends AbstractCommandAction<CustomSaveDialogActionDefinition> {
-    private com.vaadin.data.Item originalItem;
     private JcrItemAdapter item;
     private AmazonS3ClientService amazonS3ClientService;
     private SimpleTranslator i18n;
@@ -58,13 +57,9 @@ public class CustomSaveDialogAction extends AbstractCommandAction<CustomSaveDial
     protected void onPreExecute() throws Exception {
         super.onPreExecute();
 
-        // save it to s3 ...
-        // copied from s3 code info.magnolia.amazon.s3.ui.action.UploadAssetSaveAction:
-        this.originalItem = this.getCurrentItem();
-
-        UploadReceiver upload = (UploadReceiver) originalItem.getItemProperty("upload").getValue();
-        String acl = (String) originalItem.getItemProperty("acl").getValue();
-        String bucketName = (String) originalItem.getItemProperty("selectedItem").getValue();
+        UploadReceiver upload = (UploadReceiver) item.getItemProperty("upload").getValue();
+        String acl = (String) item.getItemProperty("acl").getValue();
+        String bucketName = (String) item.getItemProperty("selectedItem").getValue();
 
         Asset asset;
 
@@ -80,15 +75,11 @@ public class CustomSaveDialogAction extends AbstractCommandAction<CustomSaveDial
 
         eventBus.fireEvent(new ContentChangedEvent(asset.getItemKey()));
 
-        // and save it to Magnolia workspace ...
-        // what normally happens on dialog save:
-        final JcrNodeAdapter item = (JcrNodeAdapter) this.item;
-
         // hack to prevent bad Asset save due to invalid property value:
-        originalItem.getItemProperty("upload").setValue("");
+        item.getItemProperty("upload").setValue("");
 
-        final Node node = item.applyChanges();
-        setNodeName(node, item);
+        final Node node = ((JcrNodeAdapter) item).applyChanges();
+        setNodeName(node, ((JcrNodeAdapter) item));
         node.getSession().save();
 
         callback.onSuccess(getDefinition().getName());
