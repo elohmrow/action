@@ -1,0 +1,88 @@
+resource:
+  binaryNodeName: ""
+  class: ""
+  editFileFormat: ""
+  editFileName: ""
+  required: ""
+  name: ""
+  label: ""
+upload:
+  class: info.magnolia.ui.form.field.definition.BasicUploadFieldDefinition
+  transformerClass: info.magnolia.amazon.s3.ui.action.AmazonS3FileTransformer
+  required: true
+  label: Media
+selectedItem:
+  class: info.magnolia.ui.form.field.definition.TextFieldDefinition
+  name: selectedItem
+  label: S3 Bucket
+  defaultValue: bda-test-from-magnolia
+acl:
+  class: info.magnolia.ui.form.field.definition.TextFieldDefinition
+  name: acl
+  label: acl
+  defaultValue: Public Read
+name:
+  class: info.magnolia.ui.form.field.definition.TextFieldDefinition
+  required: true
+caption:
+  class: info.magnolia.ui.form.field.definition.TextFieldDefinition
+  name: caption
+metadataStandard:
+  class: info.magnolia.ui.form.field.definition.TextFieldDefinition
+  defaultValue: Simple Dublin Core Metadata Element Set (DCMES)
+  name: metadataStandard
+  readOnly: true
+identifier:
+  class: info.magnolia.ui.form.field.definition.TextFieldDefinition
+  name: jcr:uuid
+  readOnly: true
+mediaType:
+  class: info.magnolia.ui.form.field.definition.TextFieldDefinition
+  readOnly: true
+  type: String
+languages:
+  class: info.magnolia.ui.form.field.definition.TextFieldDefinition
+  type: String
+title:
+  class: info.magnolia.ui.form.field.definition.TextFieldDefinition
+  name: title
+subject:
+  class: info.magnolia.ui.form.field.definition.TextFieldDefinition
+  name: subject
+coverage:
+  class: info.magnolia.ui.form.field.definition.TextFieldDefinition
+  name: coverage
+description:
+  class: info.magnolia.ui.form.field.definition.TextFieldDefinition
+  rows: 5
+creationDate:
+  class: info.magnolia.ui.form.field.definition.DateFieldDefinition
+  name: mgnl:created
+  readOnly: true
+  time: true
+  type: Date
+modificationDate:
+  class: info.magnolia.ui.form.field.definition.DateFieldDefinition
+  name: mgnl:lastModified
+  readOnly: true
+  time: true
+  type: Date
+creator:
+  class: info.magnolia.ui.form.field.definition.TextFieldDefinition
+  name: mgnl:createdBy
+  readOnly: true
+publisher:
+  class: info.magnolia.ui.form.field.definition.TextFieldDefinition
+  name: publisher
+contributor:
+  class: info.magnolia.ui.form.field.definition.TextFieldDefinition
+  name: contributor
+rights:
+  class: info.magnolia.ui.form.field.definition.TextFieldDefinition
+  name: copyright
+source:
+  class: info.magnolia.ui.form.field.definition.TextFieldDefinition
+  name: source
+relation:
+  class: info.magnolia.ui.form.field.definition.TextFieldDefinition
+  name: relation
