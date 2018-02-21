@@ -54,9 +54,7 @@ public class CustomSaveDialogAction extends AbstractCommandAction<CustomSaveDial
     }
 
     @Override
-    protected void onPreExecute() throws Exception {
-        super.onPreExecute();
-
+    public void execute() throws ActionExecutionException {
         UploadReceiver upload = (UploadReceiver) item.getItemProperty("upload").getValue();
         String acl = (String) item.getItemProperty("acl").getValue();
         String bucketName = (String) item.getItemProperty("selectedItem").getValue();
@@ -75,12 +73,22 @@ public class CustomSaveDialogAction extends AbstractCommandAction<CustomSaveDial
 
         eventBus.fireEvent(new ContentChangedEvent(asset.getItemKey()));
 
-        // hack to prevent bad Asset save due to invalid property value:
         item.getItemProperty("upload").setValue("");
 
-        final Node node = ((JcrNodeAdapter) item).applyChanges();
-        setNodeName(node, ((JcrNodeAdapter) item));
-        node.getSession().save();
+        final Node node;
+        try {
+            node = ((JcrNodeAdapter) item).applyChanges();
+            setNodeName(node, ((JcrNodeAdapter) item));
+
+            node.addNode("jcr:content", "mgnl:resource").setProperty("jcr:data", node.getSession().getValueFactory().createBinary(upload.getContentAsStream()));
+            node.getNode("jcr:content").setProperty("fileName", upload.getFileName());
+            node.getNode("jcr:content").setProperty("extension", upload.getExtension());
+            node.getNode("jcr:content").setProperty("jcr:mimeType", upload.getMimeType());
+            node.getNode("jcr:content").setProperty("size", upload.getFileSize());
+            node.getSession().save();
+        } catch (RepositoryException e) {
+            throw new ActionExecutionException(e);
+        }
 
         callback.onSuccess(getDefinition().getName());
     }

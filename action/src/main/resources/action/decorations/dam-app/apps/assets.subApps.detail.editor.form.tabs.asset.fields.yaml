@@ -9,7 +9,6 @@ resource:
 upload:
   class: info.magnolia.ui.form.field.definition.BasicUploadFieldDefinition
   transformerClass: info.magnolia.amazon.s3.ui.action.AmazonS3FileTransformer
-  required: true
   label: Media
 selectedItem:
   class: info.magnolia.ui.form.field.definition.TextFieldDefinition
