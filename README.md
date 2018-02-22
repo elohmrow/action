@@ -6,10 +6,10 @@ I wanted to do this without touching the Assets app - this way you can add this 
 worrying about later patching anything, or when updating, worrying about previously applied patches.
 
 ## How do I get it?
-git clone https://github.com/elohmrow/action.git
+```git clone https://github.com/elohmrow/action.git```
 
 ## How do I use it?
-- Either mvn clean install, then put the resultant .jar file in some WEB-INF/lib
+- Either ```mvn clean install```, then put the resultant ```.jar``` file in some ```WEB-INF/lib```
 - or include the source as a dependency in some web app, like so:
 ```
     <dependency>
@@ -25,6 +25,7 @@ Remember: it is simple right now.  Due to the S3 app it relies on, there's a lot
 - has not been tested on nested folders
 - if there are 0 items in the S3 bucket you're uploading to, it won't work.
 - would be nice to save also from the Pages app to S3 
+- would be nice to have a chooser for the s3 bucket, rather than free-entry field
 
 ## Files
 ```
