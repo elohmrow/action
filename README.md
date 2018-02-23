@@ -25,7 +25,6 @@ Remember: it is simple right now.  Due to the S3 app it relies on, there's a lot
 - has not been tested on nested folders
 - if there are 0 items in the S3 bucket you're uploading to, it won't work.
 - would be nice to save also from the Pages app to S3 
-- would be nice to have a chooser for the s3 bucket, rather than free-entry field
 
 ## Files
 ```
