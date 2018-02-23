@@ -55,13 +55,23 @@ public class AmazonS3BucketNameSelectFieldFactory extends SelectFieldFactory<Ama
     @Override
     public List<SelectFieldOptionDefinition> getSelectFieldOptionDefinition() {
         List<SelectFieldOptionDefinition> selectFieldOptions = new ArrayList<>();
+
         for (String bucketName : bucketNames) {
             SelectFieldOptionDefinition selectFieldOptionDefinition = new SelectFieldOptionDefinition();
+
             selectFieldOptionDefinition.setLabel(bucketName);
             selectFieldOptionDefinition.setValue(bucketName);
             selectFieldOptionDefinition.setName(bucketName);
             selectFieldOptions.add(selectFieldOptionDefinition);
         }
+
+        SelectFieldOptionDefinition selectFieldOptionDefinition = new SelectFieldOptionDefinition();
+        selectFieldOptionDefinition.setLabel("optional");
+        selectFieldOptionDefinition.setValue("optional");
+        selectFieldOptionDefinition.setName("optional");
+        selectFieldOptionDefinition.setSelected(true);
+        selectFieldOptions.add(selectFieldOptionDefinition);
+
         return selectFieldOptions;
     }
 }

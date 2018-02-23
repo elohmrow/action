@@ -59,19 +59,21 @@ public class CustomSaveDialogAction extends AbstractCommandAction<CustomSaveDial
         String acl = (String) item.getItemProperty("acl").getValue();
         String bucketName = (String) item.getItemProperty("selectedItem").getValue();
 
-        Asset asset;
+        if (!(acl.equals("optional") || bucketName.equals("optional"))) {
+            Asset asset;
 
-        AmazonS3AssetProvider amazonS3AssetProvider = new AmazonS3AssetProvider(amazonS3ClientService, messagesManager, i18n, serverConfiguration);
+            AmazonS3AssetProvider amazonS3AssetProvider = new AmazonS3AssetProvider(amazonS3ClientService, messagesManager, i18n, serverConfiguration);
 
-        try {
-            CannedAccessControlList cannedAcl = AmazonS3Utils.getCannedAclFromString(acl);
-            info.magnolia.dam.api.Item parent = amazonS3AssetProvider.getItem(bucketName);
-            asset = ((AmazonS3AssetProvider) parent.getAssetProvider()).uploadAsset(parent, upload, cannedAcl);
-        } catch (AmazonClientException e) {
-            throw new ActionExecutionException(e);
+            try {
+                CannedAccessControlList cannedAcl = AmazonS3Utils.getCannedAclFromString(acl);
+                info.magnolia.dam.api.Item parent = amazonS3AssetProvider.getItem(bucketName);
+                asset = ((AmazonS3AssetProvider) parent.getAssetProvider()).uploadAsset(parent, upload, cannedAcl);
+            } catch (AmazonClientException e) {
+                throw new ActionExecutionException(e);
+            }
+
+            eventBus.fireEvent(new ContentChangedEvent(asset.getItemKey()));
         }
-
-        eventBus.fireEvent(new ContentChangedEvent(asset.getItemKey()));
 
         item.getItemProperty("upload").setValue("");
 

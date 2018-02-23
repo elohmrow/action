@@ -33,11 +33,21 @@ public class AmazonS3ACLSelectFieldFactory extends SelectFieldFactory<AmazonS3AC
 
         for (CannedAccessControlList acl : acls) {
             SelectFieldOptionDefinition selectFieldOptionDefinition = new SelectFieldOptionDefinition();
+
             selectFieldOptionDefinition.setLabel(acl.name());
             selectFieldOptionDefinition.setValue(acl.name());
             selectFieldOptionDefinition.setName(acl.name());
             selectFieldOptions.add(selectFieldOptionDefinition);
         }
+
+        SelectFieldOptionDefinition selectFieldOptionDefinition = new SelectFieldOptionDefinition();
+
+        selectFieldOptionDefinition.setLabel("optional");
+        selectFieldOptionDefinition.setValue("optional");
+        selectFieldOptionDefinition.setName("optional");
+        selectFieldOptionDefinition.setSelected(true);
+        selectFieldOptions.add(selectFieldOptionDefinition);
+
         return selectFieldOptions;
     }
 }

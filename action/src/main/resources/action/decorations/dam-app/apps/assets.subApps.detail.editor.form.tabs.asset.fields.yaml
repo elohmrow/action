@@ -14,10 +14,18 @@ selectedItem:
   class: atlas.global.field.AmazonS3BucketNameSelectFieldDefinition
   name: selectedItem
   label: S3 Bucket
+  filteringMode: startswith
+  pageLength: 10
+  textInputAllowed: true
+  selected: optional
 acl:
   class: atlas.global.field.AmazonS3ACLSelectFieldDefinition
   name: acl
   label: acl
+  filteringMode: startswith
+  pageLength: 10
+  textInputAllowed: true
+  selected: optional
 name:
   class: info.magnolia.ui.form.field.definition.TextFieldDefinition
 caption:
