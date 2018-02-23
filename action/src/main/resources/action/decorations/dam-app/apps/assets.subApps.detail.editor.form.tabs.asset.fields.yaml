@@ -14,12 +14,10 @@ selectedItem:
   class: atlas.global.field.AmazonS3BucketNameSelectFieldDefinition
   name: selectedItem
   label: S3 Bucket
-  defaultValue: bda-test-from-magnolia
 acl:
-  class: info.magnolia.ui.form.field.definition.TextFieldDefinition
+  class: atlas.global.field.AmazonS3ACLSelectFieldDefinition
   name: acl
   label: acl
-  defaultValue: Public Read
 name:
   class: info.magnolia.ui.form.field.definition.TextFieldDefinition
 caption:
