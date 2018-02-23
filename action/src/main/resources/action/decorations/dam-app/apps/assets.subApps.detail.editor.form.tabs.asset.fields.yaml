@@ -11,7 +11,7 @@ upload:
   transformerClass: info.magnolia.amazon.s3.ui.action.AmazonS3FileTransformer
   label: Media
 selectedItem:
-  class: info.magnolia.ui.form.field.definition.TextFieldDefinition
+  class: atlas.global.field.AmazonS3BucketNameSelectFieldDefinition
   name: selectedItem
   label: S3 Bucket
   defaultValue: bda-test-from-magnolia
@@ -22,7 +22,6 @@ acl:
   defaultValue: Public Read
 name:
   class: info.magnolia.ui.form.field.definition.TextFieldDefinition
-  required: true
 caption:
   class: info.magnolia.ui.form.field.definition.TextFieldDefinition
   name: caption
