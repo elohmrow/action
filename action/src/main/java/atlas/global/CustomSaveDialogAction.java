@@ -59,7 +59,7 @@ public class CustomSaveDialogAction extends AbstractCommandAction<CustomSaveDial
         String acl = (String) item.getItemProperty("acl").getValue();
         String bucketName = (String) item.getItemProperty("selectedItem").getValue();
 
-        if (!(acl.equals("optional") || bucketName.equals("optional"))) {
+        if (!acl.equals("optional") || !bucketName.equals("optional")) {
             Asset asset;
 
             AmazonS3AssetProvider amazonS3AssetProvider = new AmazonS3AssetProvider(amazonS3ClientService, messagesManager, i18n, serverConfiguration);
