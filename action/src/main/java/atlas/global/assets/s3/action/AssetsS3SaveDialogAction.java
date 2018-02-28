@@ -1,7 +1,8 @@
-package atlas.global;
+package atlas.global.assets.s3.action;
 
-import info.magnolia.amazon.s3.dam.AmazonS3AssetProvider;
+import info.magnolia.amazon.s3.dam.AmazonS3Asset;
 import info.magnolia.amazon.s3.dam.AmazonS3ClientService;
+import info.magnolia.amazon.s3.dam.AmazonS3Item;
 import info.magnolia.amazon.s3.util.AmazonS3Utils;
 import info.magnolia.cms.beans.config.ServerConfiguration;
 import info.magnolia.cms.core.Path;
@@ -28,12 +29,11 @@ import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 
 import com.amazonaws.AmazonClientException;
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
 
-public class CustomSaveDialogAction extends AbstractCommandAction<CustomSaveDialogActionDefinition> {
+import atlas.global.assets.s3.AmazonItemS3AssetProvider;
+
+public class AssetsS3SaveDialogAction extends AbstractCommandAction<AssetsS3SaveDialogActionDefinition> {
     private JcrItemAdapter item;
     private AmazonS3ClientService amazonS3ClientService;
     private SimpleTranslator i18n;
@@ -43,8 +43,8 @@ public class CustomSaveDialogAction extends AbstractCommandAction<CustomSaveDial
     private EventBus eventBus;
 
     @Inject
-    public CustomSaveDialogAction(CustomSaveDialogActionDefinition definition, JcrItemAdapter item, CommandsManager commandsManager,
-                                  UiContext uiContext, SimpleTranslator i18n, AmazonS3ClientService amazonS3ClientService, MessagesManager messagesManager, ServerConfiguration serverConfiguration, EditorCallback callback, @Named(AdmincentralEventBus.NAME) EventBus eventBus) {
+    public AssetsS3SaveDialogAction(AssetsS3SaveDialogActionDefinition definition, JcrItemAdapter item, CommandsManager commandsManager,
+                                    UiContext uiContext, SimpleTranslator i18n, AmazonS3ClientService amazonS3ClientService, MessagesManager messagesManager, ServerConfiguration serverConfiguration, EditorCallback callback, @Named(AdmincentralEventBus.NAME) EventBus eventBus) {
         super(definition, item, commandsManager, uiContext, i18n);
         this.item = item;
         this.amazonS3ClientService = amazonS3ClientService;
@@ -60,23 +60,21 @@ public class CustomSaveDialogAction extends AbstractCommandAction<CustomSaveDial
         UploadReceiver upload = (UploadReceiver) item.getItemProperty("upload").getValue();
         String acl = (String) item.getItemProperty("acl").getValue();
         String bucketName = (String) item.getItemProperty("selectedItem").getValue();
-        String key = AmazonS3Utils.getObjectKeyFromPath(AmazonS3Utils.getFullPath(bucketName, null) + upload.getFileName());
 
         if (!acl.equals("optional") || !bucketName.equals("optional")) {
+            AmazonS3Asset asset;
 
-            AmazonS3AssetProvider amazonS3AssetProvider = new AmazonS3AssetProvider(amazonS3ClientService, messagesManager, i18n, serverConfiguration);
+            AmazonItemS3AssetProvider amazonS3AssetProvider = new AmazonItemS3AssetProvider(amazonS3ClientService, messagesManager, i18n, serverConfiguration);
 
             try {
                 CannedAccessControlList cannedAcl = AmazonS3Utils.getCannedAclFromString(acl);
-                AmazonS3Client client = amazonS3AssetProvider.getClient(bucketName);
-                ObjectMetadata objectMetadata = new ObjectMetadata();
-                objectMetadata.setContentLength(upload.getFileSize());
-                client.putObject(new PutObjectRequest(bucketName, key, upload.getContentAsStream(), objectMetadata).withCannedAcl(cannedAcl));
+                AmazonS3Item parent = amazonS3AssetProvider.getItem(bucketName);
+                asset = ((AmazonItemS3AssetProvider) parent.getAssetProvider()).uploadAsset(parent, upload, cannedAcl);
             } catch (AmazonClientException e) {
                 throw new ActionExecutionException(e);
             }
 
-            eventBus.fireEvent(new ContentChangedEvent(key));
+            eventBus.fireEvent(new ContentChangedEvent(asset.getItemKey()));
         }
 
         item.getItemProperty("upload").setValue("");

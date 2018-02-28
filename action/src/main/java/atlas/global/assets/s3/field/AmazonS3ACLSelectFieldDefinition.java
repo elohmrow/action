@@ -1,4 +1,4 @@
-package atlas.global.field;
+package atlas.global.assets.s3.field;
 
 import info.magnolia.ui.form.field.definition.SelectFieldDefinition;
 

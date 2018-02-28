@@ -11,7 +11,7 @@ upload:
   transformerClass: info.magnolia.amazon.s3.ui.action.AmazonS3FileTransformer
   label: Media
 selectedItem:
-  class: atlas.global.field.AmazonS3BucketNameSelectFieldDefinition
+  class: atlas.global.assets.s3.field.AmazonS3BucketNameSelectFieldDefinition
   name: selectedItem
   label: S3 Bucket
   filteringMode: startswith
@@ -19,7 +19,7 @@ selectedItem:
   textInputAllowed: true
   selected: optional
 acl:
-  class: atlas.global.field.AmazonS3ACLSelectFieldDefinition
+  class: atlas.global.assets.s3.field.AmazonS3ACLSelectFieldDefinition
   name: acl
   label: acl
   filteringMode: startswith

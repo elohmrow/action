@@ -1,2 +1,2 @@
-label: DO IT!
-class: atlas.global.CustomSaveDialogActionDefinition
+label: Save Asset
+class: atlas.global.assets.s3.action.AssetsS3SaveDialogActionDefinition

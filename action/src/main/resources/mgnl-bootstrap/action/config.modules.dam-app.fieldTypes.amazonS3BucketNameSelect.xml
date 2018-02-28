@@ -4,10 +4,10 @@
     <sv:value>mgnl:contentNode</sv:value>
   </sv:property>
   <sv:property sv:name="definitionClass" sv:type="String">
-    <sv:value>atlas.global.field.AmazonS3BucketNameSelectFieldDefinition</sv:value>
+    <sv:value>atlas.global.assets.s3.field.AmazonS3BucketNameSelectFieldDefinition</sv:value>
   </sv:property>
   <sv:property sv:name="factoryClass" sv:type="String">
-    <sv:value>atlas.global.field.AmazonS3BucketNameSelectFieldFactory</sv:value>
+    <sv:value>atlas.global.assets.s3.field.AmazonS3BucketNameSelectFieldFactory</sv:value>
   </sv:property>
 </sv:node>
 
