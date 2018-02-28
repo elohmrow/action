@@ -12,7 +12,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.vaadin.data.Item;
+import com.vaadin.v7.data.Item;
 
 public class AmazonS3ACLSelectFieldFactory extends SelectFieldFactory<AmazonS3ACLSelectFieldDefinition> {
     private SimpleTranslator i18n;

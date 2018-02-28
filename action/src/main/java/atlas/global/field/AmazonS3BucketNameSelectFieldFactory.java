@@ -16,7 +16,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import com.vaadin.data.Item;
+import com.vaadin.v7.data.Item;
 
 public class AmazonS3BucketNameSelectFieldFactory extends SelectFieldFactory<AmazonS3BucketNameSelectFieldDefinition> {
     private AmazonS3ClientService amazonS3ClientService;

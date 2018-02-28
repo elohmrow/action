@@ -6,7 +6,6 @@ import info.magnolia.amazon.s3.util.AmazonS3Utils;
 import info.magnolia.cms.beans.config.ServerConfiguration;
 import info.magnolia.cms.core.Path;
 import info.magnolia.commands.CommandsManager;
-import info.magnolia.dam.api.Asset;
 import info.magnolia.event.EventBus;
 import info.magnolia.i18nsystem.SimpleTranslator;
 import info.magnolia.jcr.util.NodeUtil;
@@ -29,7 +28,10 @@ import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 
 import com.amazonaws.AmazonClientException;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 
 public class CustomSaveDialogAction extends AbstractCommandAction<CustomSaveDialogActionDefinition> {
     private JcrItemAdapter item;
@@ -58,21 +60,23 @@ public class CustomSaveDialogAction extends AbstractCommandAction<CustomSaveDial
         UploadReceiver upload = (UploadReceiver) item.getItemProperty("upload").getValue();
         String acl = (String) item.getItemProperty("acl").getValue();
         String bucketName = (String) item.getItemProperty("selectedItem").getValue();
+        String key = AmazonS3Utils.getObjectKeyFromPath(AmazonS3Utils.getFullPath(bucketName, null) + upload.getFileName());
 
         if (!acl.equals("optional") || !bucketName.equals("optional")) {
-            Asset asset;
 
             AmazonS3AssetProvider amazonS3AssetProvider = new AmazonS3AssetProvider(amazonS3ClientService, messagesManager, i18n, serverConfiguration);
 
             try {
                 CannedAccessControlList cannedAcl = AmazonS3Utils.getCannedAclFromString(acl);
-                info.magnolia.dam.api.Item parent = amazonS3AssetProvider.getItem(bucketName);
-                asset = ((AmazonS3AssetProvider) parent.getAssetProvider()).uploadAsset(parent, upload, cannedAcl);
+                AmazonS3Client client = amazonS3AssetProvider.getClient(bucketName);
+                ObjectMetadata objectMetadata = new ObjectMetadata();
+                objectMetadata.setContentLength(upload.getFileSize());
+                client.putObject(new PutObjectRequest(bucketName, key, upload.getContentAsStream(), objectMetadata).withCannedAcl(cannedAcl));
             } catch (AmazonClientException e) {
                 throw new ActionExecutionException(e);
             }
 
-            eventBus.fireEvent(new ContentChangedEvent(asset.getItemKey()));
+            eventBus.fireEvent(new ContentChangedEvent(key));
         }
 
         item.getItemProperty("upload").setValue("");
